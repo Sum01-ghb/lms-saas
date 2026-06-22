@@ -1,21 +1,29 @@
 import React from "react";
+import { currentUser } from "@clerk/nextjs/server";
 import CompanionCard from "@/components/CompanionCard";
 import CompanionsList from "@/components/CompanionsList";
 import Cta from "@/components/CTA";
-import { recentSessions } from "@/constants";
+
 import {
   getAllCompanions,
-  getRecentSessions,
+  getUserSessions,
 } from "@/lib/actions/companion.actions";
+
 import { getSubjectColor } from "@/lib/utils";
 
 const Page = async () => {
+  const user = await currentUser();
+
   const companions = await getAllCompanions({ limit: 3 });
-  const recentSessionCompanions = await getRecentSessions(10);
+
+  const recentSessionCompanions = user
+    ? await getUserSessions(user.id, 10)
+    : [];
 
   return (
     <main>
       <h1 className="text-2xl underline">Popular Companions</h1>
+
       <section className="home-section">
         {companions.map((companion) => (
           <CompanionCard
