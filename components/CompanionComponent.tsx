@@ -69,7 +69,7 @@ const CompanionComponent = ({
       vapi.off("message", onMessage);
       vapi.off("error", onError);
       vapi.off("speech-start", onSpeechStart);
-      vapi.off("speech-end", onSpeechEnd);
+      vapi.off("spceech-end", onSpeechEnd);
     };
   }, []);
 
@@ -97,7 +97,7 @@ const CompanionComponent = ({
   };
 
   return (
-    <section className="flex flex-col h-[70vh]">
+    <section className="flex flex-col h-[70vh] lg:h-[90vh]">
       <section className="flex gap-8 max-sm:flex-col">
         <div className="companion-section">
           <div

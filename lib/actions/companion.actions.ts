@@ -66,27 +66,49 @@ export const addToSessionHistory = async (companionId: string) => {
 
 export const getRecentSessions = async (limit = 10) => {
   const supabase = createSupabaseClient();
+
   const { data, error } = await supabase
     .from("session_history")
-    .select(`companions:companion_id (*)`)
+    .select(
+      `
+      id,
+      created_at,
+      companions:companion_id (*)
+    `,
+    )
     .order("created_at", { ascending: false })
     .limit(limit);
 
   if (error) throw new Error(error.message);
-  return data.map(({ companions }) => companions);
+
+  return data.map((session) => ({
+    sessionId: session.id,
+    ...session.companions,
+  }));
 };
 
 export const getUserSessions = async (userId: string, limit = 10) => {
   const supabase = createSupabaseClient();
+
   const { data, error } = await supabase
     .from("session_history")
-    .select(`companions:companion_id (*)`)
+    .select(
+      `
+      id,
+      created_at,
+      companions:companion_id (*)
+    `,
+    )
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(limit);
 
   if (error) throw new Error(error.message);
-  return data.map(({ companions }) => companions);
+
+  return data.map((session) => ({
+    sessionId: session.id,
+    ...session.companions,
+  }));
 };
 
 export const getUserCompanions = async (userId: string) => {
